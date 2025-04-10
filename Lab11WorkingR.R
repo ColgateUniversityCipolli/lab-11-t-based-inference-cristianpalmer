@@ -25,12 +25,15 @@ bird.data <- read_csv("bird-data.csv") |>
 #######################################################
 #Step 3a: Summarize the Further Data
 
-bird.data |> 
-  summarise(
-    further_mean = mean(further_vals, na.rm = TRUE),
-    further_median = median(further_vals, na.rm = TRUE),
-    further_sd = sd(further_vals, na.rm = TRUE)
-)
+
+library(e1071)
+bird.data|>
+  summarize(meanf       = mean(further_vals),
+            sdf         = sd(further_vals),
+            medianf     = median(further_vals),
+            IQRf        = IQR(further_vals),
+            skewnessf   = skewness(further_vals),
+            exkurtosisf = kurtosis(further_vals))
 
 # Graph
 
@@ -44,12 +47,13 @@ ggplot(data = bird.data, aes(x = further_vals)) +
 #######################################################
 #Step 3b: Summarize the Closer Data
 
-bird.data |> 
-  summarise(
-    closer_mean = mean(closer_vals, na.rm = TRUE),
-    closer_median = median(closer_vals, na.rm = TRUE),
-    closer_sd = sd(closer_vals, na.rm = TRUE)
-)
+bird.data|>
+  summarize(meanc       = mean(closer_vals),
+            sdc         = sd(closer_vals),
+            medianc     = median(closer_vals),
+            IQRc        = IQR(closer_vals),
+            skewnessc   = skewness(closer_vals),
+            exkurtosisc = kurtosis(closer_vals))
 
 # Graph
 
@@ -63,12 +67,13 @@ ggplot(data = bird.data, aes(x = closer_vals)) +
 #######################################################
 #Step 3b: Summarize the Difference Data
 
-bird.data |> 
-  summarise(
-    difference_mean = mean(closer_vals, na.rm = TRUE),
-    difference_median = median(closer_vals, na.rm = TRUE),
-    difference_sd = sd(closer_vals, na.rm = TRUE)
-  )
+bird.data|>
+  summarize(meand       = mean(difference),
+            sdd         = sd(difference),
+            mediand     = median(difference),
+            IQRd        = IQR(difference),
+            skewnessd   = skewness(difference),
+            exkurtosisd = kurtosis(difference))
 
 # Graph
 
@@ -106,9 +111,14 @@ ggplot(data = bird.data, aes(x = difference)) +
 ##########################################################
 # Plot it
 ##########################################################
+(t.stat <- (xbar - mu0)/(s/sqrt(n)))
+
+
+
+
 # For plotting the null distribution
 ggdat.t <- tibble(t=seq(-5,5,length.out=1000))|>
-  mutate(pdf.null = dt(t, df=n-1))
+  mutate(pdf.null = dt(t, df=24))
 # For plotting the observed point
 ggdat.obs <- tibble(t    = t.stat, 
                     y    = 0) # to plot on x-axis
