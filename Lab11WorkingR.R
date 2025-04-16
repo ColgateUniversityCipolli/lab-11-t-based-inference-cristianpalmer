@@ -92,6 +92,8 @@ t_closer <- t.test(bird.data$closer_vals, mu = 0,
         conf.level = 0.95, alternative = "greater")
 t.close <- t_closer[[1]][[1]]
 p.close <- t_closer[[3]]
+library(effectsize)
+g.close <- interpret_hedges_g(hedges_g(x = t_closer, mu = 0, alternative = "greater"))
 
 
 #######################################################
@@ -101,6 +103,8 @@ t_further <- t.test(bird.data$further_vals, mu = 0,
         conf.level = 0.95, alternative = "less")
 t.far <- t_further[[1]][[1]]
 p.far <- t_further[[3]]
+g.far <- interpret_hedges_g(hedges_g(x = t_further, mu = 0, alternative = "less"))
+
 
 #######################################################
 
@@ -109,22 +113,19 @@ t_difference <- t.test(bird.data$difference, mu = 0,
         conf.level = 0.95, alternative = "two.sided")
 t.diff <- t_difference[[1]][[1]]
 p.diff <- t_difference[[3]]
+g.difference <- interpret_hedges_g(hedges_g(x = t_difference, mu = 0, alternative = "two.sided"))
 
 
 #######################################################
 
 # Step 5a: 
 
-
-
 ##########################################################
 # Plot it
 ##########################################################
-(t.stat <- (xbar - mu0)/(s/sqrt(n)))
-
 # For plotting the null distribution
 ggdat.t <- tibble(t=seq(-5,5,length.out=1000))|>
-  mutate(pdf.null = dt(t, df=24))
+  mutate(pdf.null = dt(t, df=n-1))
 # For plotting the observed point
 ggdat.obs <- tibble(t    = t.stat, 
                     y    = 0) # to plot on x-axis
