@@ -121,10 +121,46 @@ g.difference <- interpret_hedges_g(hedges_g(x = t_difference, mu = 0, alternativ
 # Step 5a: 
 
 ##########################################################
+# Compute the test statistic
+##########################################################
+mu0 <- 0
+x <- bird.data$closer_vals
+(xbar <- mean(x))
+(s <- sd(x))
+(n <- length(x))
+any(is.na(x)) # no missing data
+(t.stat <- (xbar - mu0)/(s/sqrt(n)))
+
+y <- bird.data$further_vals
+(xbar <- mean(y))
+(s <- sd(y))
+(n <- length(y))
+any(is.na(y)) # no missing data
+(t.stat <- (xbar - mu0)/(s/sqrt(n)))
+
+z <- bird.data$difference
+(xbar <- mean(z))
+(s <- sd(z))
+(n <- length(z))
+any(is.na(z)) # no missing data
+(t.stat <- (xbar - mu0)/(s/sqrt(n)))
+
+
+
+
+
+
+
+
+
+
+
+
+##########################################################
 # Plot it
 ##########################################################
 # For plotting the null distribution
-ggdat.t <- tibble(t=seq(-5,5,length.out=1000))|>
+bird.data <- tibble(t=seq(-5,5,length.out=1000))|>
   mutate(pdf.null = dt(t, df=n-1))
 # For plotting the observed point
 ggdat.obs <- tibble(t    = t.stat, 
