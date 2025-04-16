@@ -88,33 +88,39 @@ ggplot(data = bird.data, aes(x = difference)) +
 #######################################################
 # Step 4a: Conduct Inferences Done In Paper: Closer
 
-(t.test(bird.data$closer_vals, mu = 0, 
-        conf.level = 0.95, alternative = "greater"))
+t_closer <- t.test(bird.data$closer_vals, mu = 0, 
+        conf.level = 0.95, alternative = "greater")
+t.close <- t_closer[[1]][[1]]
+p.close <- t_closer[[3]]
+
 
 #######################################################
 
 # Step 4b: Conduct Inferences Done In Paper: Further
-(t.test(bird.data$further_vals, mu = 0, 
-        conf.level = 0.95, alternative = "less"))
+t_further <- t.test(bird.data$further_vals, mu = 0, 
+        conf.level = 0.95, alternative = "less")
+t.far <- t_further[[1]][[1]]
+p.far <- t_further[[3]]
 
 #######################################################
 
 # Step 4c: Conduct Inferences Done In Paper: Difference
-(t.test(bird.data$difference, mu = 0, 
-        conf.level = 0.95, alternative = "two.sided"))
+t_difference <- t.test(bird.data$difference, mu = 0, 
+        conf.level = 0.95, alternative = "two.sided")
+t.diff <- t_difference[[1]][[1]]
+p.diff <- t_difference[[3]]
 
 
 #######################################################
 
 # Step 5a: 
 
+
+
 ##########################################################
 # Plot it
 ##########################################################
 (t.stat <- (xbar - mu0)/(s/sqrt(n)))
-
-
-
 
 # For plotting the null distribution
 ggdat.t <- tibble(t=seq(-5,5,length.out=1000))|>
