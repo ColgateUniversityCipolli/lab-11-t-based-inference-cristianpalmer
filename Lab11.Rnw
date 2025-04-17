@@ -184,6 +184,7 @@ summary_table <- bird.data|>
 print(xtable(summary_table, digits = 3), include.rownames = FALSE)
 @
 The data suggest that there is a difference between dopamine in the brains of young zebra finches when they sing further away from their adultsong compared to closer to their adultsong. If there were no difference, we would expect all of the data points to be around zero and for the mean and median to both be around zero. However, all of these values are positive, indicating that dopamine levels are generally higher when the birds sing closer to their adultsong. Therefore, we have reason to believe that there may be a difference between dopamine in the brains of young zebra finches when they sing further away compared to closer to their adultsong.
+\end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -194,18 +195,261 @@ like: ($t=23.99$, $p<0.0001$; $g=1.34$; 95\% CI: 4.43, 4.60).\\
 correction of their $p$-values. I'm waiting to hear back from them via email!
 \begin{enumerate}
   \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).''
+\newline ($t=8.3024$, $p=8.132e-09$; $g=1.61$; 95\% CI: 1.10, Inf).
   \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''
+\newline ($t=-7.778$, $p=2.587e-08$; $g=-1.51$; 95\% CI: -Inf, -1.02).
   \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).''
+\newline ($t=8.5109$, $p=1.037e-08$; $g=1.65$; 95\% CI: 1.04, 2.24).
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \item Reverse engineer the hypothesis test plot from Lecture 20 to create accurate
 hypothesis testing plots for each part of the previous question.
 \begin{enumerate}
   \item Question 4, part(a).
+<<echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.width=5, fig.height=3>>=
+mu0 <- 0
+x <- bird.data$closer_vals
+xbar <- mean(x)
+s <- sd(x)
+n <- length(x)
+na_check_x <- any(is.na(x)) # no missing data
+t.statx <- (xbar - mu0)/(s/sqrt(n))
+
+y <- bird.data$further_vals
+xbar <- mean(y)
+s <- sd(y)
+n <- length(y)
+na_check_y <- any(is.na(y)) # no missing data
+t.staty <- (xbar - mu0)/(s/sqrt(n))
+
+z <- bird.data$difference
+xbar <- mean(z)
+s <- sd(z)
+n <- length(z)
+na_check_z <- any(is.na(z)) # no missing data
+t.statz <- (xbar - mu0)/(s/sqrt(n))
+
+##########################################################
+# Plot Closer
+##########################################################
+n=25
+
+# For plotting the null distribution
+ggdat.t <- tibble(t=seq(-5,5,length.out=1000))|>
+  mutate(pdf.null = dt(t, df=n-1))
+
+
+# For plotting the observed point
+ggdat.obs <- tibble(close.t    = t.statx, 
+                    far.t = t.staty,
+                    diff.t = t.statz,
+                    y    = 0)
+
+# Resampling to approximate the sampling distribution 
+# on the data
+R <- 1000
+resamples <- tibble(close.t=numeric(R))
+for(i in 1:R){
+  curr.sample <- sample(x=bird.data$closer_vals,
+                        size=n,
+                        replace=T)
+  resamples$t[i] = (mean(curr.sample)-mu0)/(sd(curr.sample)/sqrt(n))
+}
+
+t.breaks <- c(-5, qt(0.025, df = n-1), # rejection region (left)
+              0, 
+              qt(0.975, df = n-1), 5,  # rejection region (right)
+              t.statx)                  # t-statistic observed
+xbar.breaks <- t.breaks * s/(sqrt(n)) + mu0
+
+# Create Plot
+ggplot() +
+  # null distribution
+  geom_line(data=ggdat.t, 
+            aes(x=t, y=pdf.null))+
+  geom_hline(yintercept=0)+
+  # rejection regions
+  geom_ribbon(data=subset(ggdat.t, t<=qt(0.025, df=n-1)), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="grey", alpha=0.5)+
+  geom_ribbon(data=subset(ggdat.t, t>=qt(0.975, df=n-1)), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="grey", alpha=0.5)+
+  # plot p-value (not visible)
+  geom_ribbon(data=subset(ggdat.t, t>=t.statx), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="reg", alpha=0.25)+
+  # plot observation point
+  geom_point(data=ggdat.obs, aes(x=close.t, y=y), color="red")+
+  # Resampling Distribution
+  stat_density(data=resamples, 
+               aes(x=t),
+               geom="line", color="grey")+
+  # clean up aesthetics
+  theme_bw()+
+  scale_x_continuous("t",
+                     breaks = round(t.breaks,2),
+                     sec.axis = sec_axis(~.,
+                                         name = bquote(bar(x)),
+                                         breaks = t.breaks,
+                                         labels = round(xbar.breaks,2)))+
+  ylab("Density")+
+  ggtitle("T-Test for Zebra Finches Closer Data",
+          subtitle=bquote(H[0]==0*";"~H[a]!=0))
+
+@
   \item Question 4, part(b).
+<<echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.width=5, fig.height=3>>=
+mu0 <- 0
+x <- bird.data$closer_vals
+xbar <- mean(x)
+s <- sd(x)
+n <- length(x)
+na_check_x <- any(is.na(x)) # no missing data
+t.statx <- (xbar - mu0)/(s/sqrt(n))
+
+y <- bird.data$further_vals
+xbar <- mean(y)
+s <- sd(y)
+n <- length(y)
+na_check_y <- any(is.na(y)) # no missing data
+t.staty <- (xbar - mu0)/(s/sqrt(n))
+
+z <- bird.data$difference
+xbar <- mean(z)
+s <- sd(z)
+n <- length(z)
+na_check_z <- any(is.na(z)) # no missing data
+t.statz <- (xbar - mu0)/(s/sqrt(n))
+
+R <- 1000
+resamples <- tibble(far.t=numeric(R))
+for(i in 1:R){
+  curr.sample <- sample(x=bird.data$further_vals,
+                        size=n,
+                        replace=T)
+  resamples$t[i] = (mean(curr.sample)-mu0)/(sd(curr.sample)/sqrt(n))
+}
+
+t.breaks <- c(-5, qt(0.025, df = n-1), # rejection region (left)
+              0, 
+              qt(0.975, df = n-1), 5,  # rejection region (right)
+              t.statx)                  # t-statistic observed
+xbar.breaks <- t.breaks * s/(sqrt(n)) + mu0
+
+# Create Plot
+ggplot() +
+  # null distribution
+  geom_line(data=ggdat.t, 
+            aes(x=t, y=pdf.null))+
+  geom_hline(yintercept=0)+
+  # rejection regions
+  geom_ribbon(data=subset(ggdat.t, t<=qt(0.025, df=n-1)), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="grey", alpha=0.5)+
+  geom_ribbon(data=subset(ggdat.t, t>=qt(0.975, df=n-1)), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="grey", alpha=0.5)+
+  # plot p-value (not visible)
+  geom_ribbon(data=subset(ggdat.t, t>=t.staty), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="NA", alpha=0.25)+
+  # plot observation point
+  geom_point(data=ggdat.obs, aes(x=far.t, y=y), color="red")+
+  # Resampling Distribution
+  stat_density(data=resamples, 
+               aes(x=t),
+               geom="line", color="grey")+
+  # clean up aesthetics
+  theme_bw()+
+  scale_x_continuous("t",
+                     breaks = round(t.breaks,2),
+                     sec.axis = sec_axis(~.,
+                                         name = bquote(bar(x)),
+                                         breaks = t.breaks,
+                                         labels = round(xbar.breaks,2)))+
+  ylab("Density")+
+  ggtitle("T-Test for Zebra Finches Further Data",
+          subtitle=bquote(H[0]==0*";"~H[a]!=0))
+@
+\newpage
   \item Question 4, part(c).
+<<echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.width=5, fig.height=3>>=
+mu0 <- 0
+x <- bird.data$closer_vals
+xbar <- mean(x)
+s <- sd(x)
+n <- length(x)
+na_check_x <- any(is.na(x)) # no missing data
+t.statx <- (xbar - mu0)/(s/sqrt(n))
+
+y <- bird.data$further_vals
+xbar <- mean(y)
+s <- sd(y)
+n <- length(y)
+na_check_y <- any(is.na(y)) # no missing data
+t.staty <- (xbar - mu0)/(s/sqrt(n))
+
+z <- bird.data$difference
+xbar <- mean(z)
+s <- sd(z)
+n <- length(z)
+na_check_z <- any(is.na(z)) # no missing data
+t.statz <- (xbar - mu0)/(s/sqrt(n))
+
+R <- 1000
+resamples <- tibble(diff.t=numeric(R))
+for(i in 1:R){
+  curr.sample <- sample(x=bird.data$difference,
+                        size=n,
+                        replace=T)
+  resamples$t[i] = (mean(curr.sample)-mu0)/(sd(curr.sample)/sqrt(n))
+}
+
+t.breaks <- c(-5, qt(0.025, df = n-1), # rejection region (left)
+              0, 
+              qt(0.975, df = n-1), 5,  # rejection region (right)
+              t.statx)                  # t-statistic observed
+xbar.breaks <- t.breaks * s/(sqrt(n)) + mu0
+
+# Create Plot
+ggplot() +
+  # null distribution
+  geom_line(data=ggdat.t, 
+            aes(x=t, y=pdf.null))+
+  geom_hline(yintercept=0)+
+  # rejection regions
+  geom_ribbon(data=subset(ggdat.t, t<=qt(0.025, df=n-1)), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="grey", alpha=0.5)+
+  geom_ribbon(data=subset(ggdat.t, t>=qt(0.975, df=n-1)), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="grey", alpha=0.5)+
+  # plot p-value (not visible)
+  geom_ribbon(data=subset(ggdat.t, t>=t.statz), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="NA", alpha=0.25)+
+  # plot observation point
+  geom_point(data=ggdat.obs, aes(x=diff.t, y=y), color="red")+
+  # Resampling Distribution
+  stat_density(data=resamples, 
+               aes(x=t),
+               geom="line", color="grey")+
+  # clean up aesthetics
+  theme_bw()+
+  scale_x_continuous("t",
+                     breaks = round(t.breaks,2),
+                     sec.axis = sec_axis(~.,
+                                         name = bquote(bar(x)),
+                                         breaks = t.breaks,
+                                         labels = round(xbar.breaks,2)))+
+  ylab("Density")+
+  ggtitle("T-Test for Zebra Finches Difference Data",
+          subtitle=bquote(H[0]==0*";"~H[a]!=0))
+@
 \end{enumerate}
 \end{enumerate}
 

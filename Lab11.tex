@@ -151,7 +151,7 @@ by subtracting the closer value column from the farther value column.
 
 \end{knitrout}
 % latex table generated in R 4.4.2 by xtable 1.8-4 package
-% Wed Apr 16 21:15:45 2025
+% Wed Apr 16 21:41:45 2025
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrr}
@@ -182,7 +182,7 @@ fiches decreases when they sing further away.
 
 \end{knitrout}
 % latex table generated in R 4.4.2 by xtable 1.8-4 package
-% Wed Apr 16 21:15:45 2025
+% Wed Apr 16 21:41:45 2025
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrr}
@@ -214,7 +214,7 @@ fiches increases when they sing further away.
 
 \end{knitrout}
 % latex table generated in R 4.4.2 by xtable 1.8-4 package
-% Wed Apr 16 21:15:45 2025
+% Wed Apr 16 21:41:45 2025
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrr}
@@ -227,6 +227,7 @@ mean\_difference & sd\_difference & median\_difference & IQR\_difference & skewn
 \end{table}
 
 The data suggest that there is a difference between dopamine in the brains of young zebra finches when they sing further away from their adultsong compared to closer to their adultsong. If there were no difference, we would expect all of the data points to be around zero and for the mean and median to both be around zero. However, all of these values are positive, indicating that dopamine levels are generally higher when the birds sing closer to their adultsong. Therefore, we have reason to believe that there may be a difference between dopamine in the brains of young zebra finches when they sing further away compared to closer to their adultsong.
+\end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -237,18 +238,50 @@ like: ($t=23.99$, $p<0.0001$; $g=1.34$; 95\% CI: 4.43, 4.60).\\
 correction of their $p$-values. I'm waiting to hear back from them via email!
 \begin{enumerate}
   \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).''
+\newline ($t=8.3024$, $p=8.132e-09$; $g=1.61$; 95\% CI: 1.10, Inf).
   \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''
+\newline ($t=-7.778$, $p=2.587e-08$; $g=-1.51$; 95\% CI: -Inf, -1.02).
   \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).''
+\newline ($t=8.5109$, $p=1.037e-08$; $g=1.65$; 95\% CI: 1.04, 2.24).
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \item Reverse engineer the hypothesis test plot from Lecture 20 to create accurate
 hypothesis testing plots for each part of the previous question.
 \begin{enumerate}
   \item Question 4, part(a).
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-9-1} 
+
+}
+
+
+\end{knitrout}
   \item Question 4, part(b).
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-10-1} 
+
+}
+
+
+\end{knitrout}
+\newpage
   \item Question 4, part(c).
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-11-1} 
+
+}
+
+
+\end{knitrout}
 \end{enumerate}
 \end{enumerate}
 
