@@ -101,7 +101,7 @@ ggplot(data = bird.data, aes(y = difference, x = "")) +
 # Step 4a: Conduct Inferences Done In Paper: Closer
 
 t_closer <- t.test(bird.data$closer_vals, mu = 0, 
-        conf.level = 0.95, alternative = "greater")
+        conf.level = 0.95, alternative = "two.sided")
 t.close <- t_closer[[1]][[1]]
 p.close <- t_closer[[3]]
 library(effectsize)
@@ -112,7 +112,7 @@ g.close <- interpret_hedges_g(hedges_g(x = t_closer, mu = 0, alternative = "grea
 
 # Step 4b: Conduct Inferences Done In Paper: Further
 t_further <- t.test(bird.data$further_vals, mu = 0, 
-        conf.level = 0.95, alternative = "less")
+        conf.level = 0.95, alternative = "two.sided")
 t.far <- t_further[[1]][[1]]
 p.far <- t_further[[3]]
 g.far <- interpret_hedges_g(hedges_g(x = t_further, mu = 0, alternative = "less"))

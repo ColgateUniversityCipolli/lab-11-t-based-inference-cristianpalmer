@@ -195,11 +195,11 @@ like: ($t=23.99$, $p<0.0001$; $g=1.34$; 95\% CI: 4.43, 4.60).\\
 correction of their $p$-values. I'm waiting to hear back from them via email!
 \begin{enumerate}
   \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).''
-\newline ($t=8.3024$, $p=8.132e-09$; $g=1.61$; 95\% CI: 1.10, Inf).
+\newline ($t=8.3024$, $p<0.0001$; $g=1.61$; 95\% CI: 0.1173875, 0.1950586).
   \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''
-\newline ($t=-7.778$, $p=2.587e-08$; $g=-1.51$; 95\% CI: -Inf, -1.02).
+\newline ($t=-7.778$, $p<0.0001$; $g=-1.51$; 95\% CI: -0.2565176, -0.1489313).
   \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).''
-\newline ($t=8.5109$, $p=1.037e-08$; $g=1.65$; 95\% CI: 1.04, 2.24).
+\newline ($t=8.5109$, $p<0.0001$; $g=1.65$; 95\% CI: 1.04, 2.24).
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
