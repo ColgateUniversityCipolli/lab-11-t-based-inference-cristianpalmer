@@ -201,10 +201,7 @@ ggplot() +
             aes(x=t, y=pdf.null))+
   geom_hline(yintercept=0)+
   # rejection regions
-  geom_ribbon(data=subset(ggdat.t, t<=qt(0.025, df=n-1)), 
-              aes(x=t, ymin=0, ymax=pdf.null),
-              fill="grey", alpha=0.5)+
-  geom_ribbon(data=subset(ggdat.t, t>=qt(0.975, df=n-1)), 
+  geom_ribbon(data=subset(ggdat.t, t>=qt(0.950, df=n-1)), 
               aes(x=t, ymin=0, ymax=pdf.null),
               fill="grey", alpha=0.5)+
   # plot p-value (not visible)
@@ -257,10 +254,7 @@ ggplot() +
             aes(x=t, y=pdf.null))+
   geom_hline(yintercept=0)+
   # rejection regions
-  geom_ribbon(data=subset(ggdat.t, t<=qt(0.025, df=n-1)), 
-              aes(x=t, ymin=0, ymax=pdf.null),
-              fill="grey", alpha=0.5)+
-  geom_ribbon(data=subset(ggdat.t, t>=qt(0.975, df=n-1)), 
+  geom_ribbon(data=subset(ggdat.t, t<=qt(0.050, df=n-1)), 
               aes(x=t, ymin=0, ymax=pdf.null),
               fill="grey", alpha=0.5)+
   # plot p-value (not visible)

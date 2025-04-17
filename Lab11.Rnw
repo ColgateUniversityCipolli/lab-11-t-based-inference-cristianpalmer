@@ -272,10 +272,7 @@ ggplot() +
             aes(x=t, y=pdf.null))+
   geom_hline(yintercept=0)+
   # rejection regions
-  geom_ribbon(data=subset(ggdat.t, t<=qt(0.025, df=n-1)), 
-              aes(x=t, ymin=0, ymax=pdf.null),
-              fill="grey", alpha=0.5)+
-  geom_ribbon(data=subset(ggdat.t, t>=qt(0.975, df=n-1)), 
+  geom_ribbon(data=subset(ggdat.t, t>=qt(0.950, df=n-1)), 
               aes(x=t, ymin=0, ymax=pdf.null),
               fill="grey", alpha=0.5)+
   # plot p-value (not visible)
@@ -297,8 +294,8 @@ ggplot() +
                                          breaks = t.breaks,
                                          labels = round(xbar.breaks,2)))+
   ylab("Density")+
-  ggtitle("T-Test for Zebra Finches Closer Data",
-          subtitle=bquote(H[0]==0*";"~H[a]!=0))
+  ggtitle("One-Sided T-Test for Zebra Finches Closer Data",
+          subtitle=bquote(H[0]==0*";"~H[a]>0))
 
 @
   \item Question 4, part(b).
@@ -334,7 +331,7 @@ for(i in 1:R){
   resamples$t[i] = (mean(curr.sample)-mu0)/(sd(curr.sample)/sqrt(n))
 }
 
-t.breaks <- c(-5, qt(0.025, df = n-1), # rejection region (left)
+t.breaks <- c(-5,-8.30, qt(0.025, df = n-1), # rejection region (left)
               0, 
               qt(0.975, df = n-1), 5,  # rejection region (right)
               t.statx)                  # t-statistic observed
@@ -347,10 +344,7 @@ ggplot() +
             aes(x=t, y=pdf.null))+
   geom_hline(yintercept=0)+
   # rejection regions
-  geom_ribbon(data=subset(ggdat.t, t<=qt(0.025, df=n-1)), 
-              aes(x=t, ymin=0, ymax=pdf.null),
-              fill="grey", alpha=0.5)+
-  geom_ribbon(data=subset(ggdat.t, t>=qt(0.975, df=n-1)), 
+  geom_ribbon(data=subset(ggdat.t, t<=qt(0.050, df=n-1)), 
               aes(x=t, ymin=0, ymax=pdf.null),
               fill="grey", alpha=0.5)+
   # plot p-value (not visible)
@@ -372,8 +366,8 @@ ggplot() +
                                          breaks = t.breaks,
                                          labels = round(xbar.breaks,2)))+
   ylab("Density")+
-  ggtitle("T-Test for Zebra Finches Further Data",
-          subtitle=bquote(H[0]==0*";"~H[a]!=0))
+  ggtitle("One-Sided T-Test for Zebra Finches Further Data",
+          subtitle=bquote(H[0]==0*";"~H[a]<0))
 @
 \newpage
   \item Question 4, part(c).
@@ -447,7 +441,7 @@ ggplot() +
                                          breaks = t.breaks,
                                          labels = round(xbar.breaks,2)))+
   ylab("Density")+
-  ggtitle("T-Test for Zebra Finches Difference Data",
+  ggtitle("Two-Sided T-Test for Zebra Finches Difference Data",
           subtitle=bquote(H[0]==0*";"~H[a]!=0))
 @
 \end{enumerate}
