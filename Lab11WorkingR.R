@@ -28,61 +28,73 @@ bird.data <- read_csv("bird-data.csv") |>
 
 library(e1071)
 bird.data|>
-  summarize(meanf       = mean(further_vals),
-            sdf         = sd(further_vals),
-            medianf     = median(further_vals),
-            IQRf        = IQR(further_vals),
-            skewnessf   = skewness(further_vals),
-            exkurtosisf = kurtosis(further_vals))
+  summarize(mean_further       = mean(further_vals),
+            sd_further         = sd(further_vals),
+            median_further     = median(further_vals),
+            IQR_further        = IQR(further_vals),
+            skewness_further   = skewness(further_vals),
+            exkurtosis_further = kurtosis(further_vals))
 
 # Graph
 
-ggplot(data = bird.data, aes(x = further_vals)) +
-  geom_histogram(binwidth = 0.20, color = "black", fill = "blue") +
-  labs(title = "Histogram of Further Values",
-       x = "Further Values",
-       y = "Count") +
-  theme_minimal()
+ggplot(data = bird.data, aes(y = further_vals, x = "")) +
+  geom_boxplot(fill = "lightblue", color = "black", alpha = 0.8, width = 0.5) +
+  geom_jitter(width = 0.2, alpha = 0.5, color = "darkblue") +
+  labs(title = "Boxplot of Further Values",
+       y = "Further Values",
+       x = NULL) +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
 
 #######################################################
 #Step 3b: Summarize the Closer Data
 
 bird.data|>
-  summarize(meanc       = mean(closer_vals),
-            sdc         = sd(closer_vals),
-            medianc     = median(closer_vals),
-            IQRc        = IQR(closer_vals),
-            skewnessc   = skewness(closer_vals),
-            exkurtosisc = kurtosis(closer_vals))
+  summarize(mean_closer       = mean(closer_vals),
+            sd_closer         = sd(closer_vals),
+            median_closer     = median(closer_vals),
+            IQR_closer        = IQR(closer_vals),
+            skewness_closer   = skewness(closer_vals),
+            exkurtosis_closer = kurtosis(closer_vals))
 
 # Graph
 
-ggplot(data = bird.data, aes(x = closer_vals)) +
-  geom_histogram(binwidth = 0.2, color = "black", fill = "blue") +
-  labs(title = "Histogram of Closer Values",
-       x = "Closer Values",
-       y = "Count") +
-  theme_minimal()
+ggplot(data = bird.data, aes(y = closer_vals, x = "")) +
+  geom_boxplot(fill = "lightblue", color = "black", alpha = 0.8, width = 0.5) +
+  geom_jitter(width = 0.2, alpha = 0.5, color = "darkblue") +
+  labs(title = "Boxplot of Closer Values",
+       y = "Closer Values",
+       x = NULL) +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
 
 #######################################################
 #Step 3b: Summarize the Difference Data
 
 bird.data|>
-  summarize(meand       = mean(difference),
-            sdd         = sd(difference),
-            mediand     = median(difference),
-            IQRd        = IQR(difference),
-            skewnessd   = skewness(difference),
-            exkurtosisd = kurtosis(difference))
+  summarize(mean_difference       = mean(difference),
+            sd_difference         = sd(difference),
+            median_difference    = median(difference),
+            IQR_difference        = IQR(difference),
+            skewness_difference   = skewness(difference),
+            exkurtosis_difference = kurtosis(difference))
 
 # Graph
 
-ggplot(data = bird.data, aes(x = difference)) +
-  geom_histogram(binwidth = 0.2, color = "black", fill = "blue") +
-  labs(title = "Histogram of Difference Values",
-       x = "Difference Values",
-       y = "Count") +
-  theme_minimal()
+ggplot(data = bird.data, aes(y = difference, x = "")) +
+  geom_boxplot(fill = "lightblue", color = "black", alpha = 0.8, width = 0.5) +
+  geom_jitter(width = 0.2, alpha = 0.5, color = "darkblue") +
+  labs(title = "Boxplot of Difference Values",
+       y = "Difference Values",
+       x = NULL) +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
 
 
 #######################################################
@@ -129,49 +141,48 @@ x <- bird.data$closer_vals
 (s <- sd(x))
 (n <- length(x))
 any(is.na(x)) # no missing data
-(t.stat <- (xbar - mu0)/(s/sqrt(n)))
+(t.statx <- (xbar - mu0)/(s/sqrt(n)))
 
 y <- bird.data$further_vals
 (xbar <- mean(y))
 (s <- sd(y))
 (n <- length(y))
 any(is.na(y)) # no missing data
-(t.stat <- (xbar - mu0)/(s/sqrt(n)))
+(t.staty <- (xbar - mu0)/(s/sqrt(n)))
 
 z <- bird.data$difference
 (xbar <- mean(z))
 (s <- sd(z))
 (n <- length(z))
-any(is.na(z)) # no missing data
-(t.stat <- (xbar - mu0)/(s/sqrt(n)))
-
-
-
-
-
-
-
+any(is.na(y)) # no missing data
+(t.statz <- (xbar - mu0)/(s/sqrt(n)))
 
 
 
 
 
 ##########################################################
-# Plot it
+# Plot Closer
 ##########################################################
+n=25
+
 # For plotting the null distribution
-bird.data <- tibble(t=seq(-5,5,length.out=1000))|>
+ggdat.t <- tibble(t=seq(-5,5,length.out=1000))|>
   mutate(pdf.null = dt(t, df=n-1))
+
+
 # For plotting the observed point
-ggdat.obs <- tibble(t    = t.stat, 
-                    y    = 0) # to plot on x-axis
+ggdat.obs <- tibble(close.t    = t.statx, 
+                    far.t = t.staty,
+                    diff.t = t.statz,
+                    y    = 0)
 
 # Resampling to approximate the sampling distribution 
 # on the data
 R <- 1000
-resamples <- tibble(t=numeric(R))
+resamples <- tibble(close.t=numeric(R))
 for(i in 1:R){
-  curr.sample <- sample(x=x,
+  curr.sample <- sample(x=bird.data$closer_vals,
                         size=n,
                         replace=T)
   resamples$t[i] = (mean(curr.sample)-mu0)/(sd(curr.sample)/sqrt(n))
@@ -180,7 +191,7 @@ for(i in 1:R){
 t.breaks <- c(-5, qt(0.025, df = n-1), # rejection region (left)
               0, 
               qt(0.975, df = n-1), 5,  # rejection region (right)
-              t.stat)                  # t-statistic observed
+              t.statx)                  # t-statistic observed
 xbar.breaks <- t.breaks * s/(sqrt(n)) + mu0
 
 # Create Plot
@@ -197,11 +208,11 @@ ggplot() +
               aes(x=t, ymin=0, ymax=pdf.null),
               fill="grey", alpha=0.5)+
   # plot p-value (not visible)
-  geom_ribbon(data=subset(ggdat.t, t>=t.stat), 
+  geom_ribbon(data=subset(ggdat.t, t>=t.statx), 
               aes(x=t, ymin=0, ymax=pdf.null),
               fill="reg", alpha=0.25)+
   # plot observation point
-  geom_point(data=ggdat.obs, aes(x=t, y=y), color="red")+
+  geom_point(data=ggdat.obs, aes(x=close.t, y=y), color="red")+
   # Resampling Distribution
   stat_density(data=resamples, 
                aes(x=t),
@@ -215,5 +226,118 @@ ggplot() +
                                          breaks = t.breaks,
                                          labels = round(xbar.breaks,2)))+
   ylab("Density")+
-  ggtitle("T-Test for Mean Perceived Whiteness of Social Security Recipients",
-          subtitle=bquote(H[0]==3.5*";"~H[a]!=3.5))
+  ggtitle("T-Test for Zebra Finches Closer Data",
+          subtitle=bquote(H[0]==0*";"~H[a]!=0))
+
+##########################################################
+# Plot Further
+##########################################################
+
+# Resampling to approximate the sampling distribution 
+# on the data
+R <- 1000
+resamples <- tibble(far.t=numeric(R))
+for(i in 1:R){
+  curr.sample <- sample(x=bird.data$further_vals,
+                        size=n,
+                        replace=T)
+  resamples$t[i] = (mean(curr.sample)-mu0)/(sd(curr.sample)/sqrt(n))
+}
+
+t.breaks <- c(-5, qt(0.025, df = n-1), # rejection region (left)
+              0, 
+              qt(0.975, df = n-1), 5,  # rejection region (right)
+              t.statx)                  # t-statistic observed
+xbar.breaks <- t.breaks * s/(sqrt(n)) + mu0
+
+# Create Plot
+ggplot() +
+  # null distribution
+  geom_line(data=ggdat.t, 
+            aes(x=t, y=pdf.null))+
+  geom_hline(yintercept=0)+
+  # rejection regions
+  geom_ribbon(data=subset(ggdat.t, t<=qt(0.025, df=n-1)), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="grey", alpha=0.5)+
+  geom_ribbon(data=subset(ggdat.t, t>=qt(0.975, df=n-1)), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="grey", alpha=0.5)+
+  # plot p-value (not visible)
+  geom_ribbon(data=subset(ggdat.t, t>=t.staty), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="NA", alpha=0.25)+
+  # plot observation point
+  geom_point(data=ggdat.obs, aes(x=far.t, y=y), color="red")+
+  # Resampling Distribution
+  stat_density(data=resamples, 
+               aes(x=t),
+               geom="line", color="grey")+
+  # clean up aesthetics
+  theme_bw()+
+  scale_x_continuous("t",
+                     breaks = round(t.breaks,2),
+                     sec.axis = sec_axis(~.,
+                                         name = bquote(bar(x)),
+                                         breaks = t.breaks,
+                                         labels = round(xbar.breaks,2)))+
+  ylab("Density")+
+  ggtitle("T-Test for Zebra Finches Further Data",
+          subtitle=bquote(H[0]==0*";"~H[a]!=0))
+
+##########################################################
+# Plot Difference
+##########################################################
+
+# Resampling to approximate the sampling distribution 
+# on the data
+R <- 1000
+resamples <- tibble(diff.t=numeric(R))
+for(i in 1:R){
+  curr.sample <- sample(x=bird.data$difference,
+                        size=n,
+                        replace=T)
+  resamples$t[i] = (mean(curr.sample)-mu0)/(sd(curr.sample)/sqrt(n))
+}
+
+t.breaks <- c(-5, qt(0.025, df = n-1), # rejection region (left)
+              0, 
+              qt(0.975, df = n-1), 5,  # rejection region (right)
+              t.statx)                  # t-statistic observed
+xbar.breaks <- t.breaks * s/(sqrt(n)) + mu0
+
+# Create Plot
+ggplot() +
+  # null distribution
+  geom_line(data=ggdat.t, 
+            aes(x=t, y=pdf.null))+
+  geom_hline(yintercept=0)+
+  # rejection regions
+  geom_ribbon(data=subset(ggdat.t, t<=qt(0.025, df=n-1)), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="grey", alpha=0.5)+
+  geom_ribbon(data=subset(ggdat.t, t>=qt(0.975, df=n-1)), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="grey", alpha=0.5)+
+  # plot p-value (not visible)
+  geom_ribbon(data=subset(ggdat.t, t>=t.statz), 
+              aes(x=t, ymin=0, ymax=pdf.null),
+              fill="NA", alpha=0.25)+
+  # plot observation point
+  geom_point(data=ggdat.obs, aes(x=diff.t, y=y), color="red")+
+  # Resampling Distribution
+  stat_density(data=resamples, 
+               aes(x=t),
+               geom="line", color="grey")+
+  # clean up aesthetics
+  theme_bw()+
+  scale_x_continuous("t",
+                     breaks = round(t.breaks,2),
+                     sec.axis = sec_axis(~.,
+                                         name = bquote(bar(x)),
+                                         breaks = t.breaks,
+                                         labels = round(xbar.breaks,2)))+
+  ylab("Density")+
+  ggtitle("T-Test for Zebra Finches Difference Data",
+          subtitle=bquote(H[0]==0*";"~H[a]!=0))
+

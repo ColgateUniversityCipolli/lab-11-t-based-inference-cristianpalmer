@@ -89,6 +89,32 @@ conduct a power analysis. How many observations would the researchers
 need to detect a moderate-to-large effect ($d=0.65$) when using 
 $\alpha=0.05$ and default power (0.80) for a two-sided one sample 
 $t$ test.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hldef{(pwr)}
+\hldef{(}\hlkwd{pwr.t.test}\hldef{(}\hlkwc{d} \hldef{=} \hlnum{0.65}\hldef{,} \hlcom{# large effect}
+           \hlkwc{power} \hldef{=} \hlnum{0.80}\hldef{,}
+           \hlkwc{sig.level} \hldef{=} \hlnum{0.05}\hldef{,}
+           \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{,}
+           \hlkwc{type} \hldef{=} \hlsng{"one.sample"}\hldef{))}
+\end{alltt}
+\begin{verbatim}
+## 
+##      One-sample t test power calculation 
+## 
+##               n = 20.58039
+##               d = 0.65
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+When we perform two-sample one-sided t-test with with power = 0.80,
+and $\alpha$ = 0.05, we get an output of n = 20.58039. 
+So, to detect a moderate-to-large effect (d= 0.65), the researchers
+must use atleast 21 observations.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COLLECT DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -98,25 +124,109 @@ do to collect the data for Figure 2(g). Note that you only need the
 \texttt{closer\_vals} and \texttt{further\_vals}. Ensure to 
 \texttt{mutate()} the data to get a difference 
 (e.g., \texttt{closer\_vals - further\_vals}).
+
+To collect the data for Figure2(g), we had to download the Excel file from the link 
+and then isolate the two specific Excel sheets we wanted; which 
+were the closer values sheet and the farther values sheet. 
+Then, we combined the two Excel sheets and saved them to a csv
+which we then read with \verb|read_csv|.
+Finally, we used mutate to create a difference column which was calculated
+by subtracting the closer value column from the farther value column.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SUMMARIZE DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \item Summarize the data.
 \begin{enumerate}
   \item Summarize the further data. Do the data suggest that
    dopamine in the brains of young zebra finches decreases when
    they sing further away?
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-3-1} 
+
+}
+
+
+\end{knitrout}
+% latex table generated in R 4.4.2 by xtable 1.8-4 package
+% Wed Apr 16 21:15:45 2025
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+mean\_further & sd\_further & median\_further & IQR\_further & skewness\_further & exkurtosis\_further \\ 
+  \hline
+-0.203 & 0.130 & -0.187 & 0.187 & -1.036 & 1.192 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+The data suggest that dopamine in the brains of young zebra finches decreases when they sing further away
+since the mean and median are both negative. Looking at the boxplot, it is abundantly clear
+that nearly all of the points are negative, further showing that the dopamine in the brans of young zebra
+fiches decreases when they sing further away.
+
+
    \item Summarize the closer data. Do the data suggest that
    dopamine in the brains of young zebra finches increases when
    they sing closer to their adult song?
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-5-1} 
+
+}
+
+
+\end{knitrout}
+% latex table generated in R 4.4.2 by xtable 1.8-4 package
+% Wed Apr 16 21:15:45 2025
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+mean\_closer & sd\_closer & median\_closer & IQR\_closer & skewness\_closer & exkurtosis\_closer \\ 
+  \hline
+0.156 & 0.094 & 0.146 & 0.107 & 0.295 & -0.859 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+The data suggest that dopamine in the brains of young zebra finches increases when they sing further away
+since the mean and median are both positive Looking at the boxplot, it is abundantly clear
+that nearly all of the points are positive, further showing that the dopamine in the brans of young zebra
+fiches increases when they sing further away.
+
+
   \item Summarize the paired differences. Do the data suggest
   that there is a difference between dopamine in the brains of
   young zebra finches when they sing further away compared to 
   closer to their adult song?
-  \item \textbf{Optional Challenge:} Can you reproduce Figure 2(g)?
-  Note that the you can use \texttt{geom\_errorbar()} to plot
-  the range created by adding the mean $\pm$ one standard deviation.
-\end{enumerate}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-7-1} 
+
+}
+
+
+\end{knitrout}
+% latex table generated in R 4.4.2 by xtable 1.8-4 package
+% Wed Apr 16 21:15:45 2025
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+mean\_difference & sd\_difference & median\_difference & IQR\_difference & skewness\_difference & exkurtosis\_difference \\ 
+  \hline
+0.359 & 0.211 & 0.332 & 0.239 & 0.773 & 0.128 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+The data suggest that there is a difference between dopamine in the brains of young zebra finches when they sing further away from their adultsong compared to closer to their adultsong. If there were no difference, we would expect all of the data points to be around zero and for the mean and median to both be around zero. However, all of these values are positive, indicating that dopamine levels are generally higher when the birds sing closer to their adultsong. Therefore, we have reason to believe that there may be a difference between dopamine in the brains of young zebra finches when they sing further away compared to closer to their adultsong.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

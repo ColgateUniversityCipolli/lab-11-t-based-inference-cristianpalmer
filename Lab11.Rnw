@@ -41,6 +41,19 @@ conduct a power analysis. How many observations would the researchers
 need to detect a moderate-to-large effect ($d=0.65$) when using 
 $\alpha=0.05$ and default power (0.80) for a two-sided one sample 
 $t$ test.
+<<>>=
+library(pwr)
+(pwr.t.test(d = 0.65, # large effect
+           power = 0.80,
+           sig.level = 0.05,
+           alternative = "two.sided",
+           type = "one.sample"))
+
+@
+When we perform two-sample one-sided t-test with with power = 0.80,
+and $\alpha$ = 0.05, we get an output of n = 20.58039. 
+So, to detect a moderate-to-large effect (d= 0.65), the researchers
+must use atleast 21 observations.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COLLECT DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -50,25 +63,127 @@ do to collect the data for Figure 2(g). Note that you only need the
 \texttt{closer\_vals} and \texttt{further\_vals}. Ensure to 
 \texttt{mutate()} the data to get a difference 
 (e.g., \texttt{closer\_vals - further\_vals}).
+
+To collect the data for Figure2(g), we had to download the Excel file from the link 
+and then isolate the two specific Excel sheets we wanted; which 
+were the closer values sheet and the farther values sheet. 
+Then, we combined the two Excel sheets and saved them to a csv
+which we then read with \verb|read_csv|.
+Finally, we used mutate to create a difference column which was calculated
+by subtracting the closer value column from the farther value column.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SUMMARIZE DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \item Summarize the data.
 \begin{enumerate}
   \item Summarize the further data. Do the data suggest that
    dopamine in the brains of young zebra finches decreases when
    they sing further away?
+<<echo=FALSE, fig.align='center', fig.width=5, fig.height=3>>=
+bird.data <- read_csv("bird-data.csv", show_col_types = FALSE) |>
+  mutate(difference = closer_vals - further_vals)
+ggplot(data = bird.data, aes(y = further_vals, x = "")) +
+  geom_boxplot(fill = "lightblue", color = "black", alpha = 0.8, width = 0.5) +
+  geom_jitter(width = 0.2, alpha = 0.5, color = "darkblue") +
+  labs(title = "Boxplot of Further Values",
+       y = "Further Values",
+       x = NULL) +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+@
+<<results='asis', echo=FALSE>>=
+library(e1071)
+library(xtable)
+
+summary_table <- bird.data |>
+  summarize(mean_further       = mean(further_vals),
+            sd_further         = sd(further_vals),
+            median_further     = median(further_vals),
+            IQR_further        = IQR(further_vals),
+            skewness_further   = skewness(further_vals),
+            exkurtosis_further = kurtosis(further_vals))
+
+print(xtable(summary_table, digits = 3), include.rownames = FALSE)
+@
+The data suggest that dopamine in the brains of young zebra finches decreases when they sing further away
+since the mean and median are both negative. Looking at the boxplot, it is abundantly clear
+that nearly all of the points are negative, further showing that the dopamine in the brans of young zebra
+fiches decreases when they sing further away.
+
+
    \item Summarize the closer data. Do the data suggest that
    dopamine in the brains of young zebra finches increases when
    they sing closer to their adult song?
+<<echo=FALSE, fig.align='center', fig.width=5, fig.height=3>>=
+bird.data <- read_csv("bird-data.csv", show_col_types = FALSE) |>
+  mutate(difference = closer_vals - further_vals)
+ggplot(data = bird.data, aes(y = closer_vals, x = "")) +
+  geom_boxplot(fill = "lightblue", color = "black", alpha = 0.8, width = 0.5) +
+  geom_jitter(width = 0.2, alpha = 0.5, color = "darkblue") +
+  labs(title = "Boxplot of Closer Values",
+       y = "Closer Values",
+       x = NULL) +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+@
+<<results='asis', echo=FALSE>>=
+library(e1071)
+library(xtable)
+
+summary_table <- bird.data|>
+  summarize(mean_closer       = mean(closer_vals),
+            sd_closer         = sd(closer_vals),
+            median_closer     = median(closer_vals),
+            IQR_closer        = IQR(closer_vals),
+            skewness_closer   = skewness(closer_vals),
+            exkurtosis_closer = kurtosis(closer_vals))
+
+print(xtable(summary_table, digits = 3), include.rownames = FALSE)
+@
+The data suggest that dopamine in the brains of young zebra finches increases when they sing further away
+since the mean and median are both positive Looking at the boxplot, it is abundantly clear
+that nearly all of the points are positive, further showing that the dopamine in the brans of young zebra
+fiches increases when they sing further away.
+
+
   \item Summarize the paired differences. Do the data suggest
   that there is a difference between dopamine in the brains of
   young zebra finches when they sing further away compared to 
   closer to their adult song?
-  \item \textbf{Optional Challenge:} Can you reproduce Figure 2(g)?
-  Note that the you can use \texttt{geom\_errorbar()} to plot
-  the range created by adding the mean $\pm$ one standard deviation.
-\end{enumerate}
+<<echo=FALSE, fig.align='center', fig.width=5, fig.height=3>>=
+bird.data <- read_csv("bird-data.csv", show_col_types = FALSE) |>
+  mutate(difference = closer_vals - further_vals)
+ggplot(data = bird.data, aes(y = difference, x = "")) +
+  geom_boxplot(fill = "lightblue", color = "black", alpha = 0.8, width = 0.5) +
+  geom_jitter(width = 0.2, alpha = 0.5, color = "darkblue") +
+  labs(title = "Boxplot of Difference Values",
+       y = "Difference Values",
+       x = NULL) +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+@
+<<results='asis', echo=FALSE>>=
+library(e1071)
+library(xtable)
+
+summary_table <- bird.data|>
+  summarize(mean_difference       = mean(difference),
+            sd_difference         = sd(difference),
+            median_difference    = median(difference),
+            IQR_difference        = IQR(difference),
+            skewness_difference   = skewness(difference),
+            exkurtosis_difference = kurtosis(difference))
+
+print(xtable(summary_table, digits = 3), include.rownames = FALSE)
+@
+The data suggest that there is a difference between dopamine in the brains of young zebra finches when they sing further away from their adultsong compared to closer to their adultsong. If there were no difference, we would expect all of the data points to be around zero and for the mean and median to both be around zero. However, all of these values are positive, indicating that dopamine levels are generally higher when the birds sing closer to their adultsong. Therefore, we have reason to believe that there may be a difference between dopamine in the brains of young zebra finches when they sing further away compared to closer to their adultsong.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
